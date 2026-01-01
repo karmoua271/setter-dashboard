@@ -1,394 +1,109 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Setters - Connecté</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { font-family: 'Segoe UI', sans-serif; background: #0a0a0a; min-height: 100vh; padding: 20px; color: #fff; }
-        
-        .container { max-width: 1400px; margin: 0 auto; }
-        
-        /* Login Screen */
-        .login-container { 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-        }
-        
-        .login-box { 
-            background: #1a1a1a; 
-            padding: 40px; 
-            border-radius: 15px; 
-            box-shadow: 0 0 30px rgba(255,0,0,0.3); 
-            border: 1px solid rgba(255,0,0,0.2); 
-            width: 100%; 
-            max-width: 400px; 
-        }
-        
-        .login-box h1 { color: #FF0000; margin-bottom: 20px; text-align: center; text-shadow: 0 0 20px rgba(255,0,0,0.8); }
-        
-        .login-form-group { margin-bottom: 20px; }
-        
-        .login-form-group label { display: block; margin-bottom: 8px; color: #fff; font-weight: 600; }
-        
-        .login-form-group input { 
-            width: 100%; 
-            padding: 12px; 
-            border: 2px solid rgba(255,0,0,0.3); 
-            border-radius: 8px; 
-            background: #0a0a0a; 
-            color: #fff; 
-            font-size: 1em; 
-        }
-        
-        .login-form-group input:focus { outline: none; border-color: #FF0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); }
-        
-        .login-btn { 
-            width: 100%; 
-            background: #FF0000; 
-            color: white; 
-            border: none; 
-            padding: 15px; 
-            border-radius: 10px; 
-            font-size: 1.1em; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: all 0.3s; 
-            box-shadow: 0 0 30px rgba(255,0,0,0.5); 
-        }
-        
-        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(255,0,0,0.8); }
-        
-        .error-message { color: #FF0000; margin-top: 10px; text-align: center; }
-        
-        .user-info { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 20px; 
-            padding: 15px; 
-            background: #1a1a1a; 
-            border-radius: 10px; 
-            border: 1px solid rgba(255,0,0,0.2); 
-        }
-        
-        .user-info span { color: #999; }
-        
-        .user-info strong { color: #FF0000; }
-        
-        .logout-btn { 
-            background: #1a1a1a; 
-            color: #FF0000; 
-            border: 2px solid #FF0000; 
-            padding: 10px 20px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-weight: 600; 
-            transition: all 0.3s; 
-        }
-        
-        .logout-btn:hover { background: #FF0000; color: white; }
-        
-        .header { background: #1a1a1a; padding: 30px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 0 30px rgba(255,0,0,0.3); border: 1px solid rgba(255,0,0,0.2); }
-        
-        .header h1 { color: #FF0000; font-size: 2.5em; margin-bottom: 10px; text-shadow: 0 0 20px rgba(255,0,0,0.8); }
-        
-        .header p { color: #999; font-size: 1.1em; }
-        
-        .tabs { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
-        
-        .tab-button { background: #1a1a1a; border: 1px solid rgba(255,0,0,0.3); color: #fff; padding: 15px 30px; border-radius: 10px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 15px rgba(255,0,0,0.1); }
-        
-        .tab-button:hover { transform: translateY(-2px); box-shadow: 0 0 25px rgba(255,0,0,0.4); }
-        
-        .tab-button.active { background: #FF0000; box-shadow: 0 0 30px rgba(255,0,0,0.6); }
-        
-        .tab-content { display: none; }
-        
-        .tab-content.active { display: block; }
-        
-        .form-section { background: #1a1a1a; padding: 30px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 0 20px rgba(255,0,0,0.2); border: 1px solid rgba(255,0,0,0.2); }
-        
-        .form-section h2 { color: #FF0000; margin-bottom: 20px; font-size: 1.8em; border-bottom: 3px solid #FF0000; padding-bottom: 10px; text-shadow: 0 0 15px rgba(255,0,0,0.6); }
-        
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 20px; }
-        
-        .form-group { display: flex; flex-direction: column; }
-        
-        .form-group label { font-weight: 600; margin-bottom: 8px; color: #fff; }
-        
-        .form-group input, .form-group select, .form-group textarea { padding: 12px; border: 2px solid rgba(255,0,0,0.3); border-radius: 8px; font-size: 1em; background: #0a0a0a; color: #fff; transition: all 0.3s; font-family: inherit; }
-        
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #FF0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); }
-        
-        .form-group textarea { resize: vertical; min-height: 80px; }
-        
-        .radio-group { display: flex; gap: 20px; margin-top: 8px; }
-        
-        .radio-group label { display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer; }
-        
-        .submit-btn { background: #FF0000; color: white; border: none; padding: 15px 40px; border-radius: 10px; font-size: 1.2em; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 30px rgba(255,0,0,0.5); width: 100%; }
-        
-        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(255,0,0,0.8); }
-        
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        
-        .stat-card { background: #1a1a1a; padding: 25px; border-radius: 15px; box-shadow: 0 0 20px rgba(255,0,0,0.2); text-align: center; border: 1px solid rgba(255,0,0,0.2); }
-        
-        .stat-card h3 { color: #999; font-size: 0.9em; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .stat-card .value { font-size: 2.5em; font-weight: 700; color: #FF0000; margin-bottom: 5px; text-shadow: 0 0 20px rgba(255,0,0,0.6); }
-        
-        .stat-card .subtitle { color: #666; font-size: 0.9em; }
-        
-        .setter-list { background: #1a1a1a; padding: 30px; border-radius: 15px; box-shadow: 0 0 20px rgba(255,0,0,0.2); margin-bottom: 20px; border: 1px solid rgba(255,0,0,0.2); }
-        
-        .setter-list h2 { color: #FF0000; margin-bottom: 20px; font-size: 1.8em; text-shadow: 0 0 15px rgba(255,0,0,0.6); }
-        
-        .setter-item { background: #0a0a0a; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid #FF0000; box-shadow: 0 0 15px rgba(255,0,0,0.15); }
-        
-        .setter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; }
-        
-        .setter-name { font-size: 1.3em; font-weight: 700; color: #fff; }
-        
-        .setter-ca { font-size: 1.5em; font-weight: 700; color: #FF0000; text-shadow: 0 0 15px rgba(255,0,0,0.6); }
-        
-        .setter-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
-        
-        .metric { display: flex; flex-direction: column; }
-        
-        .metric-label { font-size: 0.85em; color: #999; margin-bottom: 5px; }
-        
-        .metric-value { font-size: 1.2em; font-weight: 600; color: #fff; }
-        
-        .export-section { background: #1a1a1a; padding: 30px; border-radius: 15px; box-shadow: 0 0 20px rgba(255,0,0,0.2); margin-bottom: 20px; border: 1px solid rgba(255,0,0,0.2); }
-        
-        .export-section h2 { color: #FF0000; text-shadow: 0 0 15px rgba(255,0,0,0.6); margin-bottom: 15px; }
-        
-        .export-btn { background: #FF0000; color: white; border: none; padding: 15px 40px; border-radius: 10px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: all 0.3s; margin-right: 10px; margin-bottom: 10px; box-shadow: 0 0 20px rgba(255,0,0,0.4); }
-        
-        .export-btn:hover { box-shadow: 0 0 30px rgba(255,0,0,0.7); transform: translateY(-2px); }
-        
-        .delete-btn { background: #1a1a1a; color: #FF0000; border: 2px solid #FF0000; padding: 15px 40px; border-radius: 10px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: all 0.3s; }
-        
-        .delete-btn:hover { background: #FF0000; color: white; box-shadow: 0 0 30px rgba(255,0,0,0.7); transform: translateY(-2px); }
-        
-        .insights { background: #1a1a1a; padding: 30px; border-radius: 15px; box-shadow: 0 0 20px rgba(255,0,0,0.2); margin-bottom: 20px; border: 1px solid rgba(255,0,0,0.2); }
-        
-        .insights h2 { color: #FF0000; margin-bottom: 20px; font-size: 1.8em; text-shadow: 0 0 15px rgba(255,0,0,0.6); }
-        
-        .insight-item { background: #0a0a0a; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #FF0000; color: #fff; box-shadow: 0 0 10px rgba(255,0,0,0.1); }
-        
-        .insight-item.warning { border-left-color: #ffc107; box-shadow: 0 0 10px rgba(255,193,7,0.1); }
-        
-        .top-performer { border-left-color: #FFD700; background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,215,0,0.05) 100%); box-shadow: 0 0 20px rgba(255,215,0,0.2); }
-        
-        .empty-state { text-align: center; padding: 60px 20px; color: #666; }
-        
-        .loading { text-align: center; padding: 20px; color: #999; }
-        
-        /* Mobile Optimizations */
-        @media (max-width: 768px) {
-            body { padding: 10px; }
-            
-            .container { max-width: 100%; }
-            
-            .header { padding: 20px; }
-            .header h1 { font-size: 1.8em; }
-            .header p { font-size: 0.9em; }
-            
-            .login-box { padding: 25px; margin: 10px; }
-            
-            .user-info { 
-                flex-direction: column; 
-                gap: 10px; 
-                text-align: center; 
-            }
-            .user-info span { display: block; margin: 5px 0; }
-            
-            .tabs { 
-                flex-direction: column; 
-                gap: 8px; 
-            }
-            .tab-button { 
-                width: 100%; 
-                padding: 12px 20px; 
-                font-size: 1em; 
-            }
-            
-            .form-section { padding: 20px; }
-            .form-section h2 { font-size: 1.4em; }
-            .form-grid, .stats-grid, .setter-metrics { 
-                grid-template-columns: 1fr; 
-                gap: 15px; 
-            }
-            
-            .form-group input, .form-group select, .form-group textarea {
-                font-size: 16px; /* Évite le zoom sur iOS */
-            }
-            
-            .radio-group { 
-                flex-direction: column; 
-                gap: 10px; 
-            }
-            
-            .submit-btn, .export-btn, .delete-btn {
-                width: 100%;
-                margin: 5px 0;
-                padding: 12px 20px;
-                font-size: 1em;
-            }
-            
-            .stat-card { padding: 20px; }
-            .stat-card .value { font-size: 2em; }
-            
-            .setter-item { padding: 15px; }
-            .setter-header { flex-direction: column; align-items: flex-start; gap: 10px; }
-            
-            .export-section { padding: 20px; }
-            
-            .insights { padding: 20px; }
-            .insights h2 { font-size: 1.4em; }
-            
-            #pasteData {
-                font-size: 14px;
-                min-height: 120px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .header h1 { font-size: 1.5em; }
-            .form-section h2 { font-size: 1.2em; }
-            .tab-button { font-size: 0.9em; padding: 10px 15px; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Concours-du-jour / Karmouna</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1a1a1a;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #ff0000;
+      color: #fff;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+    section {
+      padding: 2rem 1rem;
+      border-bottom: 2px solid #ff0000;
+    }
+    h2 {
+      color: #ff0000;
+      margin-top: 0;
+    }
+    p {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    .button {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      margin-top: 1rem;
+      background-color: #ff0000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+    .footer {
+      background-color: #111;
+      color: #fff;
+      text-align: center;
+      padding: 1.5rem 1rem;
+      font-size: 0.9rem;
+    }
+    @media(max-width: 600px){
+      header h1 { font-size: 1.5rem; }
+      p { font-size: 0.95rem; }
+      .button { width: 100%; text-align: center; }
+    }
+  </style>
 </head>
 <body>
-    <!-- Écran de login -->
-    <div id="loginScreen" class="login-container">
-        <div class="login-box">
-            <h1>🔐 Connexion</h1>
-            <form id="loginForm">
-                <div class="login-form-group">
-                    <label>Nom d'utilisateur</label>
-                    <input type="text" id="loginUsername" required autocomplete="username">
-                </div>
-                <div class="login-form-group">
-                    <label>Mot de passe</label>
-                    <input type="password" id="loginPassword" required autocomplete="current-password">
-                </div>
-                <button type="submit" class="login-btn">Se connecter</button>
-                <div id="loginError" class="error-message"></div>
-            </form>
-        </div>
-    </div>
 
-    <!-- Dashboard principal -->
-    <div id="dashboard" style="display: none;">
-        <div class="container">
-            <div class="user-info">
-                <div>
-                    <span>Connecté en tant que: <strong id="currentUser"></strong></span>
-                    <span style="margin-left: 20px; color: #666;">Rôle: <strong id="currentRole"></strong></span>
-                </div>
-                <button class="logout-btn" onclick="logout()">Déconnexion</button>
-            </div>
+<header>
+  <h1>Concours-du-jour / Karmouna 🎮</h1>
+</header>
 
-            <div class="header">
-                <h1>📊 Dashboard Setters</h1>
-                <p>Tracker de performance quotidienne - Cashflow & Qualité</p>
-            </div>
+<!-- Concours Gratuit -->
+<section>
+  <h2>🔥 Tournoi Fortnite Battle Royale – Gratuit ! 🔥</h2>
+  <p>Participation 100% gratuite<br>
+  Fortnite Battle Royale, 1 gagnant unique<br>
+  Prix : <strong>20 €</strong><br>
+  Format : 1 match unique, fair-play<br>
+  Inscription via Discord : <a href="https://discord.gg/GbfMsXHMj" style="color:#fff; text-decoration:underline;">https://discord.gg/GbfMsXHMj</a></p>
+  <a class="button" href="https://discord.gg/GbfMsXHMj">S’inscrire maintenant</a>
+</section>
 
-            <div class="tabs">
-                <button class="tab-button active" onclick="switchTab('saisie')">📝 Saisie</button>
-                <button class="tab-button" onclick="switchTab('analytics')">📈 Analytics</button>
-                <button class="tab-button" onclick="switchTab('export')">💾 Export</button>
-                <button class="tab-button" id="adminTab" onclick="switchTab('admin')" style="display: none;">⚙️ Admin</button>
-            </div>
+<!-- Coaching 1v1 -->
+<section>
+  <h2>🎮 Coaching personnalisé 1v1 🎮</h2>
+  <p>Analyse du gameplay Fortnite : positionnement, edits, aim, late game<br>
+  Conseils avancés + plan personnalisé<br>
+  Session de 30–60 min<br>
+  Paiement via PayPal directement dans Discord<br>
+  Réservation / contact : <a href="https://discord.gg/GbfMsXHMj" style="color:#fff; text-decoration:underline;">https://discord.gg/GbfMsXHMj</a></p>
+  <a class="button" href="https://discord.gg/GbfMsXHMj">Réserver maintenant</a>
+</section>
 
-            <div id="saisie" class="tab-content active">
-                <form id="dailyForm">
-                    <div class="form-section">
-                        <h2>📋 Informations de base</h2>
-                        <div class="form-grid">
-                            <div class="form-group"><label>Nom du Setter *</label><input type="text" id="setterName" required></div>
-                            <div class="form-group"><label>Date *</label><input type="date" id="date" required></div>
-                            <div class="form-group"><label>Heures travaillées *</label><input type="number" id="heuresTravaillees" step="0.5" min="0" required></div>
-                        </div>
-                    </div>
+<!-- 1v1 personnalisé -->
+<section>
+  <h2>⚔️ Défi 1v1 personnalisé ⚔️</h2>
+  <p>Partie personnalisée Fortnite Battle Royale (code créateur)<br>
+  Mini-jeux avant le début<br>
+  Prix pour le gagnant : jusqu’à 20 €<br>
+  Paiement via PayPal directement dans Discord<br>
+  Réservation / contact : <a href="https://discord.gg/GbfMsXHMj" style="color:#fff; text-decoration:underline;">https://discord.gg/GbfMsXHMj</a></p>
+  <a class="button" href="https://discord.gg/GbfMsXHMj">Réserver le 1v1</a>
+</section>
 
-                    <div class="form-section">
-                        <h2>🔥 A. Volume d'activité</h2>
-                        <div class="form-grid">
-                            <div class="form-group"><label>Outbounds envoyés *</label><input type="number" id="outbounds" min="0" required></div>
-                            <div class="form-group"><label>Inbounds reçus *</label><input type="number" id="inbounds" min="0" required></div>
-                            <div class="form-group"><label>Conversations actives *</label><input type="number" id="conversations" min="0" required></div>
-                            <div class="form-group"><label>Follow-ups envoyés *</label><input type="number" id="followups" min="0" required></div>
-                        </div>
-                    </div>
+<!-- Footer -->
+<footer class="footer">
+  <p>Horaires : 8 janvier 13:30 → fin non prévue<br>
+  Plateformes : multiplateforme (PC / console / mobile)<br>
+  Contact : Discord uniquement → <a href="https://discord.gg/GbfMsXHMj" style="color:#fff; text-decoration:underline;">https://discord.gg/GbfMsXHMj</a><br>
+  Politique : pas de remboursement (entrée gratuite)</p>
+</footer>
 
-                    <div class="form-section">
-                        <h2>🎯 B. Qualité des leads</h2>
-                        <div class="form-grid">
-                            <div class="form-group"><label>Leads qualifiés *</label><input type="number" id="leadsQualifies" min="0" required></div>
-                            <div class="form-group"><label>Qualité moyenne (/10) *</label><input type="number" id="qualiteMoyenne" min="0" max="10" step="0.1" required></div>
-                            <div class="form-group">
-                                <label>Objection principale *</label>
-                                <select id="objectionPrincipale" required>
-                                    <option value="">Sélectionner...</option>
-                                    <option value="Trop cher">Trop cher</option>
-                                    <option value="Pas maintenant">Pas maintenant</option>
-                                    <option value="Pas convaincu">Pas convaincu</option>
-                                    <option value="Pas la cible">Pas la cible</option>
-                                    <option value="Juste curieux">Juste curieux</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Source principale *</label>
-                                <select id="sourcePrincipale" required>
-                                    <option value="">Sélectionner...</option>
-                                    <option value="Reels">Reels</option>
-                                    <option value="TikTok">TikTok</option>
-                                    <option value="YouTube">YouTube</option>
-                                    <option value="Ads">Ads</option>
-                                    <option value="Autre">Autre</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <h2>💰 C. Cashflow (150€)</h2>
-                        <div class="form-grid">
-                            <div class="form-group"><label>Personnes intéressées *</label><input type="number" id="personnesInteressees" min="0" required></div>
-                            <div class="form-group"><label>Ventes réelles *</label><input type="number" id="ventesReelles" min="0" required></div>
-                            <div class="form-group"><label>CA généré (auto)</label><input type="text" id="montantGenere" readonly style="background: #0a0a0a; font-weight: 700; color: #FF0000; font-size: 1.2em; text-shadow: 0 0 15px rgba(255,0,0,0.6); border: 2px solid rgba(255,0,0,0.5);"></div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <h2>📞 D. Qualité des Calls</h2>
-                        <div class="form-grid">
-                            <div class="form-group"><label>Calls envoyés au closer *</label><input type="number" id="callsEnvoyes" min="0" required></div>
-                            <div class="form-group">
-                                <label>Calls bien qualifiés ? *</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="callsQualifies" value="Oui" required> Oui</label>
-                                    <label><input type="radio" name="callsQualifies" value="Non"> Non</label>
-                                </div>
-                            </div>
-                            <div class="form-group"><label>Retour closer (/10) *</label><input type="number" id="retourCloser" min="1" max="10" step="0.1" required></div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <h2>🎯 E. Contrôle & Optimisation</h2>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>Script respecté ? *</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="scriptRespecte" value="Oui" requi
+</body>
+</html>
